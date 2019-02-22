@@ -1,0 +1,6 @@
+.headshot-box {
+    height: 20vh;
+    width: 20vh;
+    border: 5px solid blue;
+    display: flex;
+}
