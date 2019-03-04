@@ -1,0 +1,46 @@
+.designer-page-outer {
+    display: inline-flex;
+    justify-content: center;
+    margin: 2vh;
+    height: 80vh;
+    width: 60vh;
+    border-radius: 8vh;
+    z-index: 100;
+    background-color: blue;
+}
+
+.designer-page-inner {
+    margin: 1vh;
+    height: 78vh;
+    width: 58vh;
+    z-index: 200;
+    border-radius: 8vh;
+    background-color: #282c34;
+}
+
+.example-section{
+    margin-top: 2vh;
+    display: flex;
+    margin-left: 2vw;
+    border: white 1px solid;
+    max-width: 50%;
+    border-radius: 5vh;
+    border-style: ridge;
+    padding-left: 1vw;
+    padding-top: .5vh;
+    padding-bottom: .5vh;
+    padding-right: 1vw;
+    width: 20vw;
+
+}
+
+.example-header{
+    color: skyblue;
+    margin-right: 1vw;
+    width: 5vw;
+
+}
+
+.example-input{
+
+}
