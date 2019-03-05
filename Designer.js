@@ -62,7 +62,7 @@ class Designer extends Component {
                         {objectsForInformation}
                         <input className="example-button" type="submit" value="Submit" />
                     </form>
-                    <button id="display-code" onClick={() => this.setState({showCode : true})} className="basic-button" style={{'display' : this.state.preppedCode ? 'flex' : 'none'}}>Generate Code</button>
+                    <button id="display-code" onClick={() => this.setState({showCode : true})} className={"basic-button" + (!this.state.showCode ? "" : " disappear-button")} style={{'display' : this.state.preppedCode ? 'flex' : 'none'}}>Generate Code</button>
                     <textarea readOnly id="code-area" style={{'display' : this.state.showCode ? 'flex' : 'none'}} className="prepped-code" value={this.state.preppedCode}></textarea>
                     <button id="select-text" style={{'display' : this.state.showCode ? 'flex' : 'none'}} className="basic-button" onClick={() => this.selectCode()}>Select Code</button>
                 </span>
