@@ -15,6 +15,9 @@
     width: 58vh;
     z-index: 200;
     border-radius: 8vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: #282c34;
 }
 
@@ -38,7 +41,37 @@
     color: skyblue;
     margin-right: 1vw;
     width: 5vw;
+}
 
+@keyframes expand {
+from {
+    width: 1%;
+    margin-top: 6vw;
+    height: 1%;
+    opacity: 0;
+}
+to {
+    width: 20vw;
+    margin-top: 3vw;
+    height: 25vh;
+    opacity: 1;
+}
+}
+
+.prepped-code{
+    border-radius: 5vw;
+    text-align: center;
+    padding-left: 1vw;
+    margin-top: 3vw;
+    padding-top: 10vh;
+    padding-bottom: 0vh;
+    width: 20vw;
+    height: 25vh;
+    resize: none;
+    background-color: white;
+    -webkit-animation: expand 1.4s  ease-in-out;
+    animation: expand 1.4s ease-in-out;
+    margin-bottom: 2vw;
 }
 
 .example-input{
