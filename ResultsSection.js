@@ -18,6 +18,15 @@ class ResultsSection extends Component {
 
     componentDidMount() {
         this.checkFiltered(this.props.items)
+        if (this.props.haveSearched) {
+            this.setState({ haveSearched: true });
+        }
+        this.props.makeSearchFunctionAvailable(this.searchBySingleTrait);
+    }
+
+    componentWillUnmount() {
+        if (this.props.haveSearched) {
+        }
     }
     inWords(num) {
         let a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
@@ -43,29 +52,30 @@ class ResultsSection extends Component {
 
     checkFiltered = (itemsToFilterThrough, filterNamesAndValues, contentToSearch) => {
         let filterResults = [];
-        if(contentToSearch){
-            for (var filter of filterNamesAndValues){
-                for(var item of itemsToFilterThrough){
-                    for(var trait in item){
-                        if(trait == filter[0]){
-                            if(item[trait]== filter[1]){
+        if (contentToSearch) {
+            for (var filter of filterNamesAndValues) {
+                for (var item of itemsToFilterThrough) {
+                    for (var trait in item) {
+                        if (trait == filter[0]) {
+                            if (item[trait] == filter[1]) {
                                 filterResults.push(item);
-                                if(!this.state.haveSearched){
-                                    this.setState({haveSearched : true});
+                                if (!this.state.haveSearched) {
+                                    this.setState({ haveSearched: true });
                                 }
                             }
                         }
                     }
                 }
             }
-        } else{
+        } else {
             for (var item of itemsToFilterThrough) {
                 filterResults.push(item);
-                this.setState({haveSearched : false});
+                this.setState({ haveSearched: false });
             }
 
         }
-        this.setState({itemsToDisplay: filterResults});
+        this.setState({ itemsToDisplay: filterResults });
+        return filterResults;
     }
 
     performFilter = (e) => {
@@ -74,24 +84,34 @@ class ResultsSection extends Component {
 
     handleFilter = (event) => {
         event.preventDefault();
+        this.closeNav();
         let filterNamesAndValues = [];
         let contentToSearch = false;
         for (var fieldToSearch of event.currentTarget) {
             if (fieldToSearch.type == "text") {
                 filterNamesAndValues.push([fieldToSearch.name, fieldToSearch.value]);
-                if(fieldToSearch.value){
+                if (fieldToSearch.value) {
                     contentToSearch = true;
                 }
             }
         }
-        this.checkFiltered(this.props.items, filterNamesAndValues, contentToSearch)
+        setTimeout(() => {
+            let searchResults = this.checkFiltered(this.props.items, filterNamesAndValues, contentToSearch);
+            this.props.searchCompletedFunc(searchResults);
+        }, 500)
         return false;
     }
 
+    searchBySingleTrait = (traitNameAndValue) => {
+        let searchResults = this.checkFiltered(this.props.items, traitNameAndValue, true);
+        this.props.searchCompletedFunc(searchResults);
+    }
+
     clearSearch = (event) => {
-        for(var fieldToClear of document.getElementsByClassName("filter-input")){
+        for (var fieldToClear of document.getElementsByClassName("filter-input")) {
             fieldToClear.value = "";
         }
+        this.props.searchCompletedFunc([]);
     }
 
     closeNav() {
@@ -115,7 +135,7 @@ class ResultsSection extends Component {
                         <input class="filter-input" type="text" name="owner" /><br />
                         <br />
                         <input className="filter-button" type="submit" value="Submit" />
-                        {this.state.haveSearched ? <input className="filter-button" type="submit" value="Cancel Search" onClick={(event) => this.clearSearch(event)}/> : ''}
+                        {this.state.haveSearched ? <input className="filter-button" type="submit" value="Cancel Search" onClick={(event) => this.clearSearch(event)} /> : ''}
                     </form>
                 </div>
                 <span style={{ fontSize: '30px', cursor: 'pointer' }} onClick={() => this.openNav()}>&#9776;</span>

@@ -14,9 +14,27 @@ import {
 } from 'react-router-dom'
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      searchedItemsList : []
+    }
+  }
+
+  initialProps = this.props.itemList;
+  searchCompleted = (searchResultItems) => {
+    this.setState({searchedItemsList : searchResultItems});
+  }
 
   componentDidMount() {
   }
+
+  searchFunctionAvailable = (searchFunc) => {
+    this.searchFunctionByTrait = searchFunc;
+  }
+
+  searchFunctionByTrait;
+
   //Should have itemList in props. 
   render() {
 
@@ -71,7 +89,7 @@ class App extends Component {
     const Roster = ({ match }) => (
       <div>
         <h2>Roster</h2>
-        <ResultsSection match={match} items={this.props.itemList} />
+        <ResultsSection match={match} makeSearchFunctionAvailable={(searchFunc) => this.searchFunctionAvailable(searchFunc)} searchCompletedFunc={(searchResultItems) => this.searchCompleted(searchResultItems)} haveSearched={this.state.searchedItemsList.length > 0 ? true : false}items={this.state.searchedItemsList.length > 0 ? this.state.searchedItemsList : this.props.itemList} />
       </div>
     )
 
@@ -81,17 +99,63 @@ class App extends Component {
       </div>
     )
 
+    //For the linking lists.
+    let fetchCurrentObj = (itemName) => {
+      for (let newItem of this.props.itemList){
+        if(newItem.name == itemName){
+          return newItem;
+        }
+      }
+    }
+
     let resultPages = []
     let x = 0;
+
     for (let item of this.props.itemList) {
       x = x+1;
+      let currentLink = `/${item.name}`;
+
+      let getLeftLink = (item) => {
+        let leftLink = null;
+        let correctObj = fetchCurrentObj(item);
+        let x = this.props.itemList.lastIndexOf(correctObj);
+        if(this.state.searchedItemsList.length > 0){
+          x = this.state.searchedItemsList.lastIndexOf(correctObj);
+          if(this.state.searchedItemsList[x-1]){
+            leftLink = `/${this.state.searchedItemsList[x-1].name}`;
+          }
+        }else{
+          if(this.props.itemList[x-1]){
+            leftLink = `/${this.props.itemList[x-1].name}`;
+          }
+        }
+        return leftLink;
+      }
+
+      let getRightLink = (item) => {
+        let rightLink = null;
+        let correctObj = fetchCurrentObj(item);
+        let x = this.props.itemList.lastIndexOf(correctObj);
+        if(this.state.searchedItemsList.length > 0){
+          x = this.state.searchedItemsList.lastIndexOf(correctObj);
+          if(this.state.searchedItemsList[x+1]){
+            rightLink = `/${this.state.searchedItemsList[x+1].name}`;
+          }
+        }else{
+          if(this.props.itemList[x+1]){
+            rightLink = `/${this.props.itemList[x+1].name}`;
+          }
+        }
+        return rightLink;
+      }
+
       resultPages.push(<AnimatedRoute
         atEnter={bounceTransition.atEnter}
         atLeave={bounceTransition.atLeave}
         atActive={bounceTransition.atActive}
         mapStyles={mapStyles} 
-        className="route-wrapper"  key={x} path={`/${item.name}`} component={() => <HeadshotResult item={item} />} />);
-    }
+        className="route-wrapper"  path={currentLink} component={() => <HeadshotResult item={item} searchBySingleTrait={(traitNameAndValue) => this.searchFunctionByTrait(traitNameAndValue)}leftLink={(item) => getLeftLink(item)} rightLink={(item) => getRightLink(item)}/>} />);
+      }
 
     return (
 
@@ -100,7 +164,7 @@ class App extends Component {
           <div className="App">
             <header className="App-header">
               <button className="basic-button"><Link to="/" style={{ textDecoration: 'none' }}>Overview</Link></button>
-              <button className="basic-button"><Link to="/roster" style={{ textDecoration: 'none' }}>Roster</Link></button>
+              <button className="basic-button"><Link to="/roster" id="roster-link" style={{ textDecoration: 'none' }}>Roster</Link></button>
               <button className="basic-button"><Link to="/designer" style={{ textDecoration: 'none' }}>Designer</Link></button>
 
             </header>
