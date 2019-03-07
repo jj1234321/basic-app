@@ -14,16 +14,16 @@ import {
 } from 'react-router-dom'
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      searchedItemsList : []
+      searchedItemsList: []
     }
   }
 
   initialProps = this.props.itemList;
   searchCompleted = (searchResultItems) => {
-    this.setState({searchedItemsList : searchResultItems});
+    this.setState({ searchedItemsList: searchResultItems });
   }
 
   componentDidMount() {
@@ -89,7 +89,14 @@ class App extends Component {
     const Roster = ({ match }) => (
       <div>
         <h2>Roster</h2>
-        <ResultsSection match={match} makeSearchFunctionAvailable={(searchFunc) => this.searchFunctionAvailable(searchFunc)} searchCompletedFunc={(searchResultItems) => this.searchCompleted(searchResultItems)} haveSearched={this.state.searchedItemsList.length > 0 ? true : false}items={this.state.searchedItemsList.length > 0 ? this.state.searchedItemsList : this.props.itemList} />
+        <ResultsSection key={"roster"} match={match} mainSection={true} makeSearchFunctionAvailable={(searchFunc) => this.searchFunctionAvailable(searchFunc)} searchCompletedFunc={(searchResultItems) => this.searchCompleted(searchResultItems)} haveSearched={this.state.searchedItemsList.length > 0 ? true : false} items={this.state.searchedItemsList.length > 0 ? this.state.searchedItemsList : this.props.itemList} />
+      </div>
+    )
+
+    const Owners2 = ({ match }) => (
+      <div>
+        <h2>Owners</h2>
+        <ResultsSection key={"owners"} match={match} makeSearchFunctionAvailable={(searchFunc) => this.searchFunctionAvailable(searchFunc)} searchCompletedFunc={(searchResultItems) => this.searchCompleted(searchResultItems)} haveSearched={this.state.searchedItemsList.length > 0 ? true : false} items={this.props.ownerList} />
       </div>
     )
 
@@ -101,8 +108,17 @@ class App extends Component {
 
     //For the linking lists.
     let fetchCurrentObj = (itemName) => {
-      for (let newItem of this.props.itemList){
-        if(newItem.name == itemName){
+      for (let newItem of this.props.itemList) {
+        if (newItem.name == itemName) {
+          return newItem;
+        }
+      }
+    }
+
+    //For the linking lists.
+    let fetchCurrentObjOwner = (itemName) => {
+      for (let newItem of this.props.ownerList) {
+        if (newItem.name == itemName) {
           return newItem;
         }
       }
@@ -111,22 +127,68 @@ class App extends Component {
     let resultPages = []
     let x = 0;
 
+
+    for (let item of this.props.ownerList) {
+      x = x + 1;
+      let currentLink = `/${item.name}`;
+
+      let getLeftLink = (item) => {
+        let leftLink = null;
+        let correctObj = fetchCurrentObjOwner(item);
+        let x = this.props.ownerList.lastIndexOf(correctObj);
+        if (this.props.ownerList[x - 1]) {
+          leftLink = `/${this.props.ownerList[x - 1].name}`;
+        }
+        return leftLink;
+      }
+
+      let getRightLink = (item) => {
+        let rightLink = null;
+        let correctObj = fetchCurrentObjOwner(item);
+        let x = this.props.ownerList.lastIndexOf(correctObj);
+        if (this.props.ownerList[x + 1]) {
+          rightLink = `/${this.props.ownerList[x + 1].name}`;
+        }
+        return rightLink;
+      }
+
+      resultPages.push(<AnimatedRoute
+        atEnter={bounceTransition.atEnter}
+        atLeave={bounceTransition.atLeave}
+        atActive={bounceTransition.atActive}
+        mapStyles={mapStyles}
+        className="route-wrapper" path={currentLink} component={() => <HeadshotResult item={item} searchBySingleTrait={(traitNameAndValue) => this.searchFunctionByTrait(traitNameAndValue)} leftLink={(item) => getLeftLink(item)} rightLink={(item) => getRightLink(item)} />} />);
+    }
+
+    for (let owner of this.props.ownerList) {
+      let itemList = [];
+      if (owner.items[0]) {
+        if (owner.items[0].name) {
+          for (let ownedItem of owner.items) {
+            itemList.push(ownedItem);
+          }
+          owner.items = <ResultsSection makeSearchFunctionAvailable={(searchFunc) => this.searchFunctionAvailable(searchFunc)} searchCompletedFunc={(searchResultItems) => this.searchCompleted(searchResultItems)} haveSearched={this.state.searchedItemsList.length > 0 ? true : false} items={itemList} />
+        }
+
+      }
+    }
+
     for (let item of this.props.itemList) {
-      x = x+1;
+      x = x + 1;
       let currentLink = `/${item.name}`;
 
       let getLeftLink = (item) => {
         let leftLink = null;
         let correctObj = fetchCurrentObj(item);
         let x = this.props.itemList.lastIndexOf(correctObj);
-        if(this.state.searchedItemsList.length > 0){
+        if (this.state.searchedItemsList.length > 0) {
           x = this.state.searchedItemsList.lastIndexOf(correctObj);
-          if(this.state.searchedItemsList[x-1]){
-            leftLink = `/${this.state.searchedItemsList[x-1].name}`;
+          if (this.state.searchedItemsList[x - 1]) {
+            leftLink = `/${this.state.searchedItemsList[x - 1].name}`;
           }
-        }else{
-          if(this.props.itemList[x-1]){
-            leftLink = `/${this.props.itemList[x-1].name}`;
+        } else {
+          if (this.props.itemList[x - 1]) {
+            leftLink = `/${this.props.itemList[x - 1].name}`;
           }
         }
         return leftLink;
@@ -136,14 +198,14 @@ class App extends Component {
         let rightLink = null;
         let correctObj = fetchCurrentObj(item);
         let x = this.props.itemList.lastIndexOf(correctObj);
-        if(this.state.searchedItemsList.length > 0){
+        if (this.state.searchedItemsList.length > 0) {
           x = this.state.searchedItemsList.lastIndexOf(correctObj);
-          if(this.state.searchedItemsList[x+1]){
-            rightLink = `/${this.state.searchedItemsList[x+1].name}`;
+          if (this.state.searchedItemsList[x + 1]) {
+            rightLink = `/${this.state.searchedItemsList[x + 1].name}`;
           }
-        }else{
-          if(this.props.itemList[x+1]){
-            rightLink = `/${this.props.itemList[x+1].name}`;
+        } else {
+          if (this.props.itemList[x + 1]) {
+            rightLink = `/${this.props.itemList[x + 1].name}`;
           }
         }
         return rightLink;
@@ -153,9 +215,9 @@ class App extends Component {
         atEnter={bounceTransition.atEnter}
         atLeave={bounceTransition.atLeave}
         atActive={bounceTransition.atActive}
-        mapStyles={mapStyles} 
-        className="route-wrapper"  path={currentLink} component={() => <HeadshotResult item={item} searchBySingleTrait={(traitNameAndValue) => this.searchFunctionByTrait(traitNameAndValue)}leftLink={(item) => getLeftLink(item)} rightLink={(item) => getRightLink(item)}/>} />);
-      }
+        mapStyles={mapStyles}
+        className="route-wrapper" path={currentLink} component={() => <HeadshotResult item={item} searchBySingleTrait={(traitNameAndValue) => this.searchFunctionByTrait(traitNameAndValue)} leftLink={(item) => getLeftLink(item)} rightLink={(item) => getRightLink(item)} />} />);
+    }
 
     return (
 
@@ -166,31 +228,38 @@ class App extends Component {
               <button className="basic-button"><Link to="/" style={{ textDecoration: 'none' }}>Overview</Link></button>
               <button className="basic-button"><Link to="/roster" id="roster-link" style={{ textDecoration: 'none' }}>Roster</Link></button>
               <button className="basic-button"><Link to="/designer" style={{ textDecoration: 'none' }}>Designer</Link></button>
+              <button className="basic-button"><Link to="/owners" style={{ textDecoration: 'none' }}>Owners</Link></button>
 
             </header>
             <div id="main" className="App-body">
-                <div id="route-list">
-                  <AnimatedRoute
-                atEnter={bounceTransition.atEnter}
-                atLeave={bounceTransition.atLeave}
-                atActive={bounceTransition.atActive}
-                mapStyles={mapStyles} 
-                className="route-wrapper"  exact path="/" component={Overview2} />
-                  <AnimatedRoute
-                atEnter={bounceTransition.atEnter}
-                atLeave={bounceTransition.atLeave}
-                atActive={bounceTransition.atActive}
-                mapStyles={mapStyles} 
-                className="route-wrapper" path="/roster" component={Roster} />
+              <div id="route-list">
                 <AnimatedRoute
-                atEnter={bounceTransition.atEnter}
-                atLeave={bounceTransition.atLeave}
-                atActive={bounceTransition.atActive}
-                mapStyles={mapStyles} 
-                className="route-wrapper" path="/designer" component={Designer2} />
-                  
-                  {resultPages}
-                </div>
+                  atEnter={bounceTransition.atEnter}
+                  atLeave={bounceTransition.atLeave}
+                  atActive={bounceTransition.atActive}
+                  mapStyles={mapStyles}
+                  className="route-wrapper" exact path="/" component={Overview2} />
+                <AnimatedRoute
+                  atEnter={bounceTransition.atEnter}
+                  atLeave={bounceTransition.atLeave}
+                  atActive={bounceTransition.atActive}
+                  mapStyles={mapStyles}
+                  className="route-wrapper" path="/roster" component={Roster} />
+                <AnimatedRoute
+                  atEnter={bounceTransition.atEnter}
+                  atLeave={bounceTransition.atLeave}
+                  atActive={bounceTransition.atActive}
+                  mapStyles={mapStyles}
+                  className="route-wrapper" path="/designer" component={Designer2} />
+                <AnimatedRoute
+                  atEnter={bounceTransition.atEnter}
+                  atLeave={bounceTransition.atLeave}
+                  atActive={bounceTransition.atActive}
+                  mapStyles={mapStyles}
+                  className="route-wrapper" path="/owners" component={Owners2} />
+
+                {resultPages}
+              </div>
             </div>
           </div>
         </Router>

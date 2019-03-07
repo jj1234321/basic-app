@@ -3,7 +3,7 @@
         justify-content: left;
         flex-direction: column;
         margin: 2vh;
-        height: 80vh;
+        min-height: 80vh;
         min-width: 60vh;
         border-radius: 8vh;
         z-index: 100;
@@ -86,6 +86,10 @@ flex-direction: column;
     display: flex;
     justify-content: left;
     color: black;
+}
+
+.info-field > span{
+    margin-left: 2px;
 }
 
 .relevant-image-vertical{

@@ -59,6 +59,11 @@ color: #f1f1f1;
     margin-left: 1vh;
 }
 
+.headshot-box{
+    position: relative;
+    display: inline-flex;
+}
+
 .sidenav .closebtn {
 display: flex;
 position: absolute;
