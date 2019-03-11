@@ -26,6 +26,14 @@ class App extends Component {
     this.setState({ searchedItemsList: searchResultItems });
   }
 
+  getItemByTrait = (trait, traitName) =>{
+    if(traitName == "owner"){
+      let ownerInfo = []
+      ownerInfo.push(this.props.ownerList.find(x => x.name === trait));
+      return <ResultsSection makeSearchFunctionAvailable={(searchFunc) => this.searchFunctionAvailable(searchFunc)} searchCompletedFunc={(searchResultItems) => this.searchCompleted(searchResultItems)} haveSearched={this.state.searchedItemsList.length > 0 ? true : false} items={ownerInfo} />
+  }
+  }
+
   componentDidMount() {
   }
 
@@ -100,6 +108,13 @@ class App extends Component {
       </div>
     )
 
+    const InactiveRoster = ({ match }) => (
+      <div>
+        <h2>Inactive</h2>
+        <ResultsSection key={"owners"} match={match} makeSearchFunctionAvailable={(searchFunc) => this.searchFunctionAvailable(searchFunc)} searchCompletedFunc={(searchResultItems) => this.searchCompleted(searchResultItems)} haveSearched={this.state.searchedItemsList.length > 0 ? true : false} items={this.props.inactiveList} />
+      </div>
+    )
+
     const Topic = ({ match }) => (
       <div>
         <h3>{match.params.topicId}</h3>
@@ -162,10 +177,20 @@ class App extends Component {
 
     for (let owner of this.props.ownerList) {
       let itemList = [];
+      let inactiveList = [];
       if (owner.items[0]) {
         if (owner.items[0].name) {
           for (let ownedItem of owner.items) {
-            itemList.push(ownedItem);
+            if(ownedItem.inactive){
+              inactiveList.push(ownedItem);
+            } else{
+              itemList.push(ownedItem);
+            }
+          }
+          if(inactiveList.length > 0){
+            for(let inactiveItem of inactiveList){
+              itemList.push(inactiveItem);
+            }
           }
           owner.items = <ResultsSection makeSearchFunctionAvailable={(searchFunc) => this.searchFunctionAvailable(searchFunc)} searchCompletedFunc={(searchResultItems) => this.searchCompleted(searchResultItems)} haveSearched={this.state.searchedItemsList.length > 0 ? true : false} items={itemList} />
         }
@@ -216,7 +241,53 @@ class App extends Component {
         atLeave={bounceTransition.atLeave}
         atActive={bounceTransition.atActive}
         mapStyles={mapStyles}
-        className="route-wrapper" path={currentLink} component={() => <HeadshotResult item={item} searchBySingleTrait={(traitNameAndValue) => this.searchFunctionByTrait(traitNameAndValue)} leftLink={(item) => getLeftLink(item)} rightLink={(item) => getRightLink(item)} />} />);
+        className="route-wrapper" path={currentLink} component={() => <HeadshotResult item={item} getOwner={(trait, traitName) => this.getItemByTrait(trait, traitName)} searchBySingleTrait={(traitNameAndValue) => this.searchFunctionByTrait(traitNameAndValue)} leftLink={(item) => getLeftLink(item)} rightLink={(item) => getRightLink(item)} />} />);
+    }
+
+    for (let item of this.props.inactiveList) {
+      x = x + 1;
+      let currentLink = `/${item.name}`;
+
+      let getLeftLink = (item) => {
+        let leftLink = null;
+        let correctObj = fetchCurrentObj(item);
+        let x = this.props.itemList.lastIndexOf(correctObj);
+        if (this.state.searchedItemsList.length > 0) {
+          x = this.state.searchedItemsList.lastIndexOf(correctObj);
+          if (this.state.searchedItemsList[x - 1]) {
+            leftLink = `/${this.state.searchedItemsList[x - 1].name}`;
+          }
+        } else {
+          if (this.props.itemList[x - 1]) {
+            leftLink = `/${this.props.itemList[x - 1].name}`;
+          }
+        }
+        return leftLink;
+      }
+
+      let getRightLink = (item) => {
+        let rightLink = null;
+        let correctObj = fetchCurrentObj(item);
+        let x = this.props.itemList.lastIndexOf(correctObj);
+        if (this.state.searchedItemsList.length > 0) {
+          x = this.state.searchedItemsList.lastIndexOf(correctObj);
+          if (this.state.searchedItemsList[x + 1]) {
+            rightLink = `/${this.state.searchedItemsList[x + 1].name}`;
+          }
+        } else {
+          if (this.props.itemList[x + 1]) {
+            rightLink = `/${this.props.itemList[x + 1].name}`;
+          }
+        }
+        return rightLink;
+      }
+
+      resultPages.push(<AnimatedRoute
+        atEnter={bounceTransition.atEnter}
+        atLeave={bounceTransition.atLeave}
+        atActive={bounceTransition.atActive}
+        mapStyles={mapStyles}
+        className="route-wrapper" path={currentLink} component={() => <HeadshotResult item={item} getOwner={(trait, traitName) => this.getItemByTrait(trait, traitName)} searchBySingleTrait={(traitNameAndValue) => this.searchFunctionByTrait(traitNameAndValue)} leftLink={(item) => getLeftLink(item)} rightLink={(item) => getRightLink(item)} />} />);
     }
 
     return (
@@ -229,6 +300,7 @@ class App extends Component {
               <button className="basic-button"><Link to="/roster" id="roster-link" style={{ textDecoration: 'none' }}>Roster</Link></button>
               <button className="basic-button"><Link to="/designer" style={{ textDecoration: 'none' }}>Designer</Link></button>
               <button className="basic-button"><Link to="/owners" style={{ textDecoration: 'none' }}>Owners</Link></button>
+              <button className="basic-button"><Link to="/inactive" style={{ textDecoration: 'none' }}>Inactive</Link></button>
 
             </header>
             <div id="main" className="App-body">
@@ -257,6 +329,12 @@ class App extends Component {
                   atActive={bounceTransition.atActive}
                   mapStyles={mapStyles}
                   className="route-wrapper" path="/owners" component={Owners2} />
+                  <AnimatedRoute
+                    atEnter={bounceTransition.atEnter}
+                    atLeave={bounceTransition.atLeave}
+                    atActive={bounceTransition.atActive}
+                    mapStyles={mapStyles}
+                    className="route-wrapper" path="/inactive" component={InactiveRoster} />
 
                 {resultPages}
               </div>

@@ -111,3 +111,26 @@ flex-direction: column;
     background-color: red;
     box-shadow: 2px 2px black;
 }
+
+.owner-headshot{
+    display: block;
+    width: 100%;
+    justify-content: center;
+}
+
+.inactive {
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    filter: grayscale(100%); 
+}
+
+.owner-field{
+    margin: 2vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    color: black;
+
+}

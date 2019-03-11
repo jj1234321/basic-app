@@ -12,7 +12,8 @@ let mockData1 = {
     organization: 'Dairy',
     picture : Cheesy2,
     headshot : Cheesy2,
-    owner : 'James'
+    owner : 'James',
+    inactive: true
 }
 
 let mockData2 = {
@@ -21,7 +22,8 @@ let mockData2 = {
     organization: "Metal",
     picture : Iron,
     headshot : Iron,
-    owner : 'none'
+    owner : 'none',
+    inactive: true
 }
 
 let mockData3 = {
@@ -39,7 +41,8 @@ let mockData4= {
     organization: "Metal",
     picture : Iron,
     headshot : Iron,
-    owner : 'none'
+    owner : 'none',
+    inactive : true
 }
 
 let mockData5 = {
@@ -128,11 +131,15 @@ mockArray.forEach(function(item) {
         dataToAddTo.headshot = item.headshot;
     }
 })
-
+let inactiveArray = [];
 for (var item of mockArray) {
-    mockArray2.push(item);
+    if(item.inactive){
+        inactiveArray.push(item);
+    } else{
+        mockArray2.push(item);
+    }
 }
-ReactDOM.render(<App itemList={mockArray} ownerList={ownerArray}/>, document.getElementById('root'));
+ReactDOM.render(<App itemList={mockArray2} ownerList={ownerArray} inactiveList={inactiveArray} />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -81,6 +81,7 @@ class HeadshotResult extends Component {
     }
     //Should have item in props.
     render() {
+        let inactive = ''
         let leftLinkButton = null;
         let rightLinkButton = null;
         if (this.props.leftLink(this.props.item.name)) {
@@ -91,7 +92,7 @@ class HeadshotResult extends Component {
         }
         let setOfValues = [];
         for (let trait in this.props.item) {
-            if(trait != "picture" && trait != "headshot" && trait != "items"){
+            if(trait != "inactive" && trait != "picture" && trait != "headshot" && trait != "items" && trait != "owner"){
                 setOfValues.push(
                 <div className="info-field">
                     <br />
@@ -104,14 +105,22 @@ class HeadshotResult extends Component {
                     <br />
                     {(this.props.item[trait.toString()] ? <span style={{ 'display': 'inline-block', 'cursor': 'pointer' }} >{this.props.item[trait]}</span> : <span>'N/A'</span>)}
                 </div>);
-
+            } else if(trait == "owner"){
+                setOfValues.push(<div className="owner-field">
+                <div><div>{this.capitalizeFirstLetter(trait) + ': '+ this.props.item[trait.toString()]}</div></div>
+                    <div className="owner-headshot">{ this.props.getOwner(this.props.item[trait], trait)}</div>
+                </div>);
+            } else if(trait == "inactive"){
+                if(this.props.item[trait.toString()]){
+                    inactive = " inactive";
+                }
             }
         }
 
         return (
             <div className="result-page" id={this.props.item.name}>
                 <div className="inner-information">
-                    <img src={this.props.item.picture} id={"img-" + this.props.item.name} className="relevant-image-vertical">
+                    <img src={this.props.item.picture} id={"img-" + this.props.item.name} className={"relevant-image-vertical" + inactive}>
                     </img>
                     <br />
                     <div className="text-field">
