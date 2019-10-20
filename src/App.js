@@ -55,16 +55,27 @@ class App extends Component {
       },
     };
 
-    const Overview2 = () => (
+    const AboutMe = () => (
       <div>
-        <Overview />
+        <Overview coreText="aboutme"/>
       </div>
     )
 
-    const Roster = ({ match }) => (
+    const CoopExperiences = () => (
       <div>
-        <h2>Roster</h2>
-        <ResultsSection match={match} items={this.props.itemList} />
+        <Overview coreText="experiences"/>
+      </div>
+    )
+
+    const Resume = () => (
+      <div>
+        <Overview coreText="resume" />
+      </div>
+    )
+
+    const Projects = () => (
+      <div>
+        <Overview coreText="projects" />
       </div>
     )
 
@@ -93,7 +104,9 @@ class App extends Component {
           <div className="App">
             <header className="App-header">
               <button className="basic-button"><Link to="/" style={{ textDecoration: 'none' }}>Overview</Link></button>
-              <button className="basic-button"><Link to="/roster" style={{ textDecoration: 'none' }}>Roster</Link></button>
+              <button className="basic-button"><Link to="/coopexperiences" style={{ textDecoration: 'none' }}>Co-op Experiences</Link></button>
+              <button className="basic-button"><Link to="/resume" style={{ textDecoration: 'none' }}>Resume</Link></button>
+              <button className="basic-button"><Link to="/projects" style={{ textDecoration: 'none' }}>Projects</Link></button>
 
             </header>
             <div id="main" className="App-body">
@@ -103,13 +116,25 @@ class App extends Component {
                 atLeave={bounceTransition.atLeave}
                 atActive={bounceTransition.atActive}
                 mapStyles={mapStyles} 
-                className="route-wrapper"  exact path="/" component={Overview2} />
+                className="route-wrapper"  exact path="/" component={AboutMe} />
                   <AnimatedRoute
                 atEnter={bounceTransition.atEnter}
                 atLeave={bounceTransition.atLeave}
                 atActive={bounceTransition.atActive}
                 mapStyles={mapStyles} 
-                className="route-wrapper" path="/roster" component={Roster} />
+                className="route-wrapper" path="/coopexperiences" component={CoopExperiences} />
+                <AnimatedRoute
+              atEnter={bounceTransition.atEnter}
+              atLeave={bounceTransition.atLeave}
+              atActive={bounceTransition.atActive}
+              mapStyles={mapStyles} 
+              className="route-wrapper" path="/resume" component={Resume} />
+              <AnimatedRoute
+            atEnter={bounceTransition.atEnter}
+            atLeave={bounceTransition.atLeave}
+            atActive={bounceTransition.atActive}
+            mapStyles={mapStyles} 
+            className="route-wrapper" path="/projects" component={Projects} />
                   {resultPages}
                 </div>
             </div>
