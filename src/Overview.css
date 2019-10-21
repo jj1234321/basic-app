@@ -1,0 +1,24 @@
+.overview-page-outer {
+    display: inline-flex;
+    justify-content: center;
+    margin: 2vh;
+    height: 80vh;
+    width: 60vh;
+    border-radius: 8vh;
+    z-index: 100;
+    background-color: blue;
+}
+
+.overview-page-inner {
+    display: flex;
+    flex-direction: column;
+    margin: 1vh;
+    height: 78vh;
+    width: 58vh;
+    z-index: 200;
+    border-radius: 8vh;
+    background-color: #282c34;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}

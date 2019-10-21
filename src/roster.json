@@ -1,0 +1,39 @@
+{
+    "items": [
+        {
+            "name": "Cheese",
+            "traits": "none",
+            "picture": "Cheesey2.webp",
+            "headshot": "Cheesey2.webp",
+            "owner": "none"
+        },
+        {
+            "name": "Iron",
+            "traits": "none",
+            "picture": "iron.jpg",
+            "headshot": "iron.jpg",
+            "owner": "none"
+        },
+        {
+            "name": "Iron2",
+            "traits": "none",
+            "picture": "iron.jpg",
+            "headshot": "iron.jpg",
+            "owner": "none"
+        },
+        {
+            "name": "Iron3",
+            "traits": "none",
+            "picture": "iron.jpg",
+            "headshot": "iron.jpg",
+            "owner": "none"
+        },
+        {
+            "name": "Cheese2",
+            "traits": "none",
+            "picture": "Cheesey2.webp",
+            "headshot": "Cheesey2.webp",
+            "owner": "none"
+        }
+    ]
+}

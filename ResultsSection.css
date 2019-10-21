@@ -1,0 +1,74 @@
+.sidenav {
+height: 85vh;
+width: 0;
+position: absolute;
+z-index: 1000;
+top: 0;
+right: 0vw;
+background-color: #5178a2;
+overflow-x: hidden;
+max-width: 250px;
+transition: 0.5s;
+padding-top: 10vh;
+display: inline-flex;
+flex-direction: column;
+}
+
+.sidenav a {
+padding: 2vh 2vw 3vh;
+text-decoration: none;
+font-size: 25px;
+color: white;
+display: flex;
+transition: 0.3s;
+}
+
+.sidenav a:hover {
+color: #f1f1f1;
+}
+
+.filter-header {
+    padding: 2vh 2vw 3vh;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: flex;
+    transition: 0.3s;
+}
+
+.filter-text {
+    padding: 1vh 2vw;
+    text-decoration: none;
+    font-size: 14px;
+    float: left;
+    color: white;
+    display: flex;
+}
+
+.filter-header:hover {
+color: #f1f1f1;
+}
+
+.filter-input {
+    text-align: left;
+    width: 80%;
+    max-width: 180px;
+}
+
+.filter-button {
+    margin-left: 1vh;
+}
+
+.headshot-box{
+    position: relative;
+    display: inline-flex;
+}
+
+.sidenav .closebtn {
+display: flex;
+position: absolute;
+top: 0;
+left: 0px;
+font-size: 36px;
+margin-left: 0px;
+}

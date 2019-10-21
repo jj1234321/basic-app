@@ -1,0 +1,34 @@
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import './Headshot.css';
+
+class Headshot extends Component {
+    //Should have item in props.
+    render() {
+
+        let name = this.props.item.name
+        window.setTimeout(function () {
+            let nameBox = document.getElementById("name-box-" + name);
+            let nameElement = document.getElementById("name-" + name);
+            if (nameBox && nameElement) {
+                nameElement.classList.remove('invisible');
+                nameBox.classList.remove('invisible');
+
+            }
+        }, 500);
+
+        return (
+            <span className="headshot">
+                <span id={"name-box-" + this.props.item.name} className="name-box invisible">
+                    <span id={"name-" + this.props.item.name} className="name-focus invisible">
+                        {this.props.item.name}
+                    </span>
+                </span>
+                <img className="image-box" id="imgFull" src={this.props.item.headshot} />
+            </span>
+        );
+    }
+}
+
+export default Headshot; 
