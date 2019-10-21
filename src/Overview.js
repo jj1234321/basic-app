@@ -7,6 +7,7 @@ import { experiences } from './experiences.json';
 import { resume } from './resume.json';
 import { projects } from './projects.json';
 import headshot from './headshotimage.jpg';
+import resumePic from './resume.PNG';
 
 class Overview extends Component {
     constructor(props) {
@@ -36,6 +37,7 @@ class Overview extends Component {
             <span className="overview-page-outer">
             <span className="overview-page-inner">
             {this.props.coreText == "aboutme" ? <div className="headshot-image"><img src={headshot} width="50%"/></div> : null}
+            {this.props.coreText == "resume" ? <div className="headshot-image resume"><img src={resumePic} /></div> : null}
             <br />
             <div className="message-content" >
             {textToDisplay}

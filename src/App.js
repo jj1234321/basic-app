@@ -110,6 +110,7 @@ class App extends Component {
 
             </header>
             <div id="main" className="App-body">
+                <div className="header-line">{"Career Profile - James Harper"}</div>
                 <div id="route-list">
                   <AnimatedRoute
                 atEnter={bounceTransition.atEnter}

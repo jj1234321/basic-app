@@ -12,7 +12,7 @@
 
 .App-header {
   position: fixed;
-  z-index: 800;
+  z-index: 20;
   width: 100%;
   background-color: #282c34;
   min-height: 5vh;
@@ -40,9 +40,16 @@
 
 .App-body{
   position: relative;
-  z-index: 800;
+  z-index: 10;
   background-color: #61dafb;
   margin-top: 5vh;
+}
+
+.header-line{
+  font-weight: 600;
+  font-family: 'Times New Roman', Times, serif;
+  padding-top: 8px;
+  font-size: 24px;
 }
 
 @keyframes App-logo-spin {
@@ -84,6 +91,8 @@
 
 .message-content {
   display: inline-flex;
+  justify-content: left;
+  text-align: left;
   width: 80%;
   height: 100%;
   margin: 10px;
@@ -94,5 +103,7 @@
   background-color: gray; 
   padding-left: 16px; 
   padding-right: 8px; 
-  padding-top: 8px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  white-space: pre-line
 }
